@@ -1,0 +1,6 @@
+-- ============================================================================
+-- Owner: Parth (Task 3 - trg_Product_PreventDelete)
+-- ============================================================================
+-- Task: INSTEAD OF DELETE trigger to prevent product deletion.
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================

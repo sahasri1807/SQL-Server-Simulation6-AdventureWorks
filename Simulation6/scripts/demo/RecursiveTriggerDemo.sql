@@ -1,0 +1,6 @@
+-- ============================================================================
+-- Owner: Dhruv (Task 5 - recursive trigger demo)
+-- ============================================================================
+-- Task: Demonstrate recursive trigger behavior and mitigation.
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================

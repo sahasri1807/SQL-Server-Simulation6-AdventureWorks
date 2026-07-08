@@ -1,0 +1,7 @@
+-- ============================================================================
+-- Owner: Lien (Task 6A)
+-- Owner: Sahil (Task 6B)
+-- ============================================================================
+-- Task: Audit reporting queries for simulation deliverables.
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================

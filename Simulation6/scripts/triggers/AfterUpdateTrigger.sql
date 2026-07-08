@@ -1,0 +1,6 @@
+-- ============================================================================
+-- Owner: Brian (Task 2 - trg_Product_PriceAudit)
+-- ============================================================================
+-- Task: After UPDATE trigger to audit product price changes.
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================

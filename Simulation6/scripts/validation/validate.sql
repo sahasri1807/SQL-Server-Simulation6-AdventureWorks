@@ -1,0 +1,6 @@
+-- ============================================================================
+-- Owner: Sahasri (validation)
+-- ============================================================================
+-- Task: Validation script to verify Simulation6 deployment.
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================

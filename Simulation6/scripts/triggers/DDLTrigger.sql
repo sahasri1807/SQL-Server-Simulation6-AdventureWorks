@@ -1,0 +1,6 @@
+-- ============================================================================
+-- Owner: Joshua (Task 4 - trg_Database_SchemaAudit)
+-- ============================================================================
+-- Task: DDL trigger to audit database schema changes.
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================

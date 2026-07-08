@@ -1,0 +1,7 @@
+-- ============================================================================
+-- Owner: Hassana (Task 1A - Training schema, ProductPriceAudit)
+-- Owner: Kelvin (Task 1B - ProductDeletionAudit, DatabaseSchemaAudit)
+-- ============================================================================
+-- Task: Create audit environment (schemas and audit tables).
+-- Implementation: Team members add SQL below this header.
+-- ============================================================================
