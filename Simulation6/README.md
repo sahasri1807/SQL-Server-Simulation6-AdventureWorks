@@ -1,30 +1,313 @@
-# Simulation 6 — AdventureWorks Audit & Triggers
+# Enterprise Trigger Development and Database Auditing
 
-**Repository:** [SQL-Server-Simulation6-AdventureWorks](https://github.com/sahasri1807/SQL-Server-Simulation6-AdventureWorks)
-
-**Course / Section:** _[Placeholder — add course info]_  
-**Team Name:** _[Placeholder]_  
-**Submission Date:** _[Placeholder]_
+## SQL Server Development – Simulation 6
 
 ---
 
-## Team Assignments
+# Project Information
 
-| Task | Owner(s) | Script / Deliverable |
-|------|----------|----------------------|
-| 1A — Training schema, `ProductPriceAudit` | Hassana | `scripts/setup/CreateAuditEnvironment.sql` |
-| 1B — `ProductDeletionAudit`, `DatabaseSchemaAudit` | Kelvin | `scripts/setup/CreateAuditEnvironment.sql` |
-| 2 — `trg_Product_PriceAudit` | Brian | `scripts/triggers/AfterUpdateTrigger.sql` |
-| 3 — `trg_Product_PreventDelete` | Parth | `scripts/triggers/InsteadOfDeleteTrigger.sql` |
-| 4 — `trg_Database_SchemaAudit` | Joshua | `scripts/triggers/DDLTrigger.sql` |
-| 5 — Recursive trigger demo | Dhruv | `scripts/demo/RecursiveTriggerDemo.sql` |
-| 6A — Audit reports (part A) | Lien | `scripts/reports/AuditReports.sql` |
-| 6B — Audit reports (part B) | Sahil | `scripts/reports/AuditReports.sql` |
-| Deployment | Sahasri | `scripts/deployment/deploy_all.sql` |
-| Validation | Sahasri | `scripts/validation/validate.sql` |
-| Project coordination / README | Sahasri | `README.md` |
+| Item | Details |
+|---|---|
+| Course | SQL Server Development |
+| Module | SQL Server Triggers and Database Auditing |
+| Lab Number | Simulation 6 |
+| Lab Title | Enterprise Trigger Development and Database Auditing |
+| Business Organization | TD Bank Group (Educational Scenario) |
+| Database Platform | Microsoft SQL Server 2022 |
+| Implementation Database | AdventureWorks2022 |
+| Schema Created | Training |
+| Development Environment | SQL Server Management Studio (SSMS) |
+| Team Size | 9 Members |
+| Project Duration | 7 Days |
 
 ---
+
+# Project Overview
+
+The **Enterprise Trigger Development and Database Auditing** project implements an automated auditing framework using SQL Server triggers within the AdventureWorks2022 database.
+
+The purpose of this project is to demonstrate how enterprise database systems can monitor critical business activities, enforce data integrity rules, maintain historical records, and support compliance investigations.
+
+A dedicated **Training** schema was created to separate audit information from operational business data.
+
+The implemented solution includes:
+
+- Audit environment creation
+- Product price history tracking
+- Product deletion protection
+- Database schema change auditing
+- Recursive trigger behaviour evaluation
+- Compliance reporting
+
+This project represents an educational implementation of a database auditing solution similar to those used in enterprise financial environments.
+
+---
+
+# Business Scenario
+
+TD Bank Group requires stronger database governance controls to support:
+
+- Regulatory compliance
+- Historical investigation
+- Data integrity
+- Operational accountability
+- Security monitoring
+
+The solution addresses the following business risks:
+
+| Risk | Solution Implemented |
+|---|---|
+| Product prices modified without history | AFTER UPDATE trigger auditing |
+| Products deleted despite transaction history | INSTEAD OF DELETE trigger protection |
+| Database changes not monitored | DDL trigger auditing |
+| Recursive trigger risks unknown | Recursive trigger demonstration |
+| Audit information unavailable | Compliance reporting queries |
+
+---
+
+# Team Members and Responsibilities
+
+The project work was divided among nine team members. Each member was assigned ownership of specific database components to ensure clear responsibility, efficient development, and proper integration.
+
+| Member | Role | Responsibility |
+|---|---|---|
+| Sahasri | Team Lead / Project Coordinator | Final integration, documentation, QA review, GitHub submission |
+| Hassana | Audit Environment Developer | Training schema and ProductPriceAudit development |
+| Brian | AFTER Trigger Developer | Product price auditing trigger implementation |
+| Parth | INSTEAD OF Trigger Developer | Product deletion prevention trigger |
+| Joshua | DDL Trigger Developer | Database schema auditing trigger |
+| Kelvin | Audit Table Developer | ProductDeletionAudit and DatabaseSchemaAudit implementation |
+| Lien | Reporting Developer | Product audit and deletion compliance reports |
+| Sahil | Reporting & Validation Developer | Schema reports, login activity reports, testing support |
+| Dhruv | Recursive Trigger Developer | Recursive trigger demonstration  |
+
+---
+
+# Task Division and Team Contribution
+
+The project tasks were distributed based on database layers and technical responsibilities.
+
+| Member | Assigned Task | Deliverables |
+|---|---|---|
+| Sahasri | Final Integration and Submission | Complete project integration, documentation, README, screenshot compilation, QA review, GitHub submission |
+| Hassana | Task 1 - Audit Environment | Training schema creation, ProductPriceAudit table, constraints, indexes |
+| Brian | Task 2 - AFTER UPDATE Trigger | trg_Product_PriceAudit trigger, price change auditing logic |
+| Parth | Task 3 - INSTEAD OF DELETE Trigger | trg_Product_PreventDelete trigger, deletion validation and auditing |
+| Joshua | Task 4 - Database DDL Trigger | trg_Database_SchemaAudit trigger, CREATE/ALTER/DROP auditing |
+| Kelvin | Audit Table Development | ProductDeletionAudit table, DatabaseSchemaAudit table |
+| Dhruv | Task 5 - Recursive Trigger Demonstration | Recursive trigger testing, execution sequence analysis, documentation |
+| Lien | Task 6 Part A - Compliance Reporting | Product price audit report, deletion attempt report |
+| Sahil | Task 6 Part B - Compliance Reporting | Schema modification report, login activity report, daily audit summary |
+
+---
+
+# Implemented Database Components
+
+## 1. Training Schema
+
+A dedicated schema named **Training** was created to store all audit-related objects.
+
+Purpose:
+
+- Separate audit data from operational data
+- Improve maintainability
+- Protect historical records
+- Support compliance reporting
+
+---
+
+# Audit Tables
+
+## ProductPriceAudit
+
+Purpose:
+
+Stores historical product price modifications.
+
+Captured information:
+
+- Product ID
+- Product Name
+- Previous Price
+- Updated Price
+- User responsible for modification
+- Change timestamp
+
+
+## ProductDeletionAudit
+
+Purpose:
+
+Stores rejected product deletion attempts.
+
+Captured information:
+
+- Product ID
+- Product Name
+- Attempting user
+- Attempt timestamp
+- Reason for rejection
+
+
+## DatabaseSchemaAudit
+
+Purpose:
+
+Stores database structure modification events.
+
+Captured information:
+
+- Event type
+- Object name
+- SQL Server login
+- Event timestamp
+
+---
+
+# Trigger Implementation
+
+## AFTER UPDATE Trigger
+
+### Trigger Name
+
+`trg_Product_PriceAudit`
+
+### Purpose
+
+Automatically records successful product price changes.
+
+### Features
+
+- Executes after updates on Production.Product
+- Detects ListPrice modifications
+- Stores old and new values
+- Captures SQL Server login
+- Supports multiple row updates
+- Ignores non-price changes
+
+
+---
+
+## INSTEAD OF DELETE Trigger
+
+### Trigger Name
+
+`trg_Product_PreventDelete`
+
+### Purpose
+
+Prevents deletion of products that are referenced by customer transactions.
+
+### Features
+
+- Checks Sales.SalesOrderDetail references
+- Blocks invalid deletions
+- Records rejected attempts
+- Allows deletion of unused products
+
+
+---
+
+## Database DDL Trigger
+
+### Trigger Name
+
+`trg_Database_SchemaAudit`
+
+### Purpose
+
+Audits database structure changes.
+
+### Monitored Events
+
+- CREATE TABLE
+- ALTER TABLE
+- DROP TABLE
+
+### Captured Information
+
+- Event type
+- Object name
+- Login name
+- Date and time
+
+---
+
+# Recursive Trigger Demonstration
+
+A recursive trigger demonstration was developed to evaluate SQL Server recursive trigger behaviour.
+
+The demonstration documents:
+
+- Trigger execution sequence
+- Observed behaviour
+- Possible risks
+- Production recommendations
+
+The objective was to understand how recursive trigger execution can affect:
+
+- Performance
+- Data integrity
+- Transaction behaviour
+
+---
+
+# Compliance Reports
+
+The reporting module provides audit information required for compliance investigations.
+
+Implemented reports:
+
+## 1. Product Price Audit History
+
+Displays:
+
+- Product changes
+- Previous prices
+- Updated prices
+- Users responsible
+- Change timestamps
+
+
+## 2. Prevented Deletion Attempts
+
+Displays:
+
+- Products that could not be deleted
+- Reason for rejection
+- Attempting users
+- Attempt timestamps
+
+
+## 3. Database Schema Modification History
+
+Displays:
+
+- CREATE TABLE events
+- ALTER TABLE events
+- DROP TABLE events
+
+
+## 4. Audit Activity by Login
+
+Displays:
+
+- User activity
+- Number of audit actions
+- Activity summary
+
+
+## 5. Daily Audit Activity Summary
+
+Displays:
+
+- Daily number of audit events
+- Audit trends
+
+---
+
+# Repository Structure
+
 
 ## Repository Structure
 
@@ -73,22 +356,6 @@ Place all screenshots in `Screenshots/`. Use the filenames below (or equivalent 
 | 13 | `13_audit_reports.png` | Audit report query output |
 | 14 | `14_deploy_all.png` | Deployment script execution |
 | 15 | `15_validation.png` | Validation script results |
-
----
-
-## Student Information (placeholders)
-
-| Name | Student ID | Email |
-|------|------------|-------|
-| Hassana | _[ID]_ | _[email]_ |
-| Kelvin | _[ID]_ | _[email]_ |
-| Brian | _[ID]_ | _[email]_ |
-| Parth | _[ID]_ | _[email]_ |
-| Joshua | _[ID]_ | _[email]_ |
-| Dhruv | _[ID]_ | _[email]_ |
-| Lien | _[ID]_ | _[email]_ |
-| Sahil | _[ID]_ | _[email]_ |
-| Sahasri | _[ID]_ | _[email]_ |
 
 ---
 
