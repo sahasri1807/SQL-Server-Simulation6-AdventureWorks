@@ -28,7 +28,8 @@ BEGIN
         i.Name,                                 
         d.ListPrice,                            
         i.ListPrice,                            
-        ISNULL(SUSER_SNAME(), ORIGINAL_LOGIN()) 
+        ISNULL(SUSER_SNAME(), ORIGINAL_LOGIN()) -- SUSER_NAME() is used here in accordance with the Software Design Specification 21.3; 
+                                                -- ORIGINAL_LOGIN() refers to the login that truly opened this connection, EXECUTE AS cannot fake it, and it is never NULL.
     FROM inserted AS i                          
     INNER JOIN deleted AS d                     
         ON d.ProductID = i.ProductID            
