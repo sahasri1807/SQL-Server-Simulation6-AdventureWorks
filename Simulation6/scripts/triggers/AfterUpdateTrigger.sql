@@ -5,8 +5,8 @@
 USE AdventureWorks2022;
 GO     
 
-DROP TRIGGER IF EXISTS Production.trg_Product_PriceAudit; -- In case a trigger of the same name exists elsewhere in the schema. 
-                                                          -- A DML trigger's name must be unique within its schema.
+-- In case a trigger of the same name exists elsewhere in the schema. A DML trigger's name must be unique within its schema.
+DROP TRIGGER IF EXISTS Production.trg_Product_PriceAudit;
 GO
 
 CREATE OR ALTER TRIGGER trg_Product_PriceAudit  
