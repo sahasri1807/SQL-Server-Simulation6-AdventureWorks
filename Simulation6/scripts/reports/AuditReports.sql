@@ -1,8 +1,8 @@
 -- ============================================================================
-Owner: Lien
-Task 6 Part A  
-Report 1 - Product Price Audit History
-Report 2 - Prevented Deletion Attempts
+-- Owner: Lien
+-- Task 6 Part A
+-- Report 1 - Product Price Audit History
+-- Report 2 - Prevented Deletion Attempts
 
 USE AdventureWorks2022;  
 GO                      

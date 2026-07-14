@@ -30,7 +30,7 @@ BEGIN
         EventType,
         ObjectName,
         LoginName,
-        EventDate
+        EventTime
     )
     VALUES
     (
