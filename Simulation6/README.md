@@ -235,20 +235,33 @@ Audits database structure changes.
 
 # Recursive Trigger Demonstration
 
-A recursive trigger demonstration was developed to evaluate SQL Server recursive trigger behaviour.
+A recursive trigger demonstration was developed to evaluate SQL Server recursive trigger behaviour for Task 5.
 
-The demonstration documents:
+### Implementation Summary
+
+The Task 5 solution includes the following files:
+
+- `Simulation6/scripts/demo/RecursiveTriggerDemo.sql` — creates the demo tables, trigger, and executes the recursive trigger scenario.
+- `Simulation6/scripts/deployment/deploy_all.sql` — includes the Task 5 deployment section so the demo objects are created in the project environment.
+- `Simulation6/scripts/validation/Dhruv_RecursiveTrigger_Testing.sql` — provides a step-by-step validation guide for Dhruv's assignment.
+
+### What the Demo Demonstrates
+
+The script shows how an AFTER UPDATE trigger can update the same table and log repeated trigger activity. The demonstration helps explain:
 
 - Trigger execution sequence
-- Observed behaviour
-- Possible risks
-- Production recommendations
+- Recursive trigger behaviour
+- Potential nesting risks
+- Safe testing and validation approach
 
-The objective was to understand how recursive trigger execution can affect:
+### Expected Outcome
 
-- Performance
-- Data integrity
-- Transaction behaviour
+When the demo is executed successfully, the system should:
+
+- create the recursive trigger demo objects in the Training schema
+- insert a demo row into the main demo table
+- record trigger activity in the log table
+- display the updated values for `DemoValue`, `TriggerCount`, and `LastModified`
 
 ---
 
@@ -327,39 +340,31 @@ Simulation6/
 │   ├── deployment/
 │   │   └── deploy_all.sql
 │   └── validation/
+│       ├── Dhruv_RecursiveTrigger_Testing.sql
 │       └── validate.sql
 ├── Screenshots/
-│   └── .gitkeep
+│   ├── task_5_dhruv_deplyment.png
+│   ├── task_5_dhruv_testing.png
+│   └── task_5_dhruv_trigger-demo.png
 └── README.md
 ```
 
 ---
 
-## Screenshot Checklist (15 files)
+## Screenshot Checklist
 
-Place all screenshots in `Screenshots/`. Use the filenames below (or equivalent numbering).
+Place screenshots in `Screenshots/` and use the names below for consistency.
 
-| # | Filename (suggested) | Description |
-|---|----------------------|-------------|
-| 1 | `01_team_info.png` | Team / student information |
-| 2 | `02_audit_schema.png` | Audit schema created |
-| 3 | `03_product_price_audit_table.png` | `ProductPriceAudit` table |
-| 4 | `04_product_deletion_audit_table.png` | `ProductDeletionAudit` table |
-| 5 | `05_database_schema_audit_table.png` | `DatabaseSchemaAudit` table |
-| 6 | `06_after_update_trigger.png` | After UPDATE trigger (`trg_Product_PriceAudit`) |
-| 7 | `07_price_audit_test.png` | Price change audit test results |
-| 8 | `08_instead_of_delete_trigger.png` | INSTEAD OF DELETE trigger |
-| 9 | `09_delete_prevention_test.png` | Delete prevention test |
-| 10 | `10_ddl_trigger.png` | DDL schema audit trigger |
-| 11 | `11_ddl_audit_test.png` | DDL audit test results |
-| 12 | `12_recursive_trigger_demo.png` | Recursive trigger demonstration |
-| 13 | `13_audit_reports.png` | Audit report query output |
-| 14 | `14_deploy_all.png` | Deployment script execution |
-| 15 | `15_validation.png` | Validation script results |
+| # | Filename | Description |
+|---|----------|-------------|
+| 1 | `task_5_dhruv_deplyment.png` | Deployment script execution for Task 5 |
+| 2 | `task_5_dhruv_trigger-demo.png` | Recursive trigger demo output |
+| 3 | `task_5_dhruv_testing.png` | Validation/testing results for Task 5 |
 
 ---
 
 ## Notes
 
-- SQL scripts currently contain **comment headers only**; each owner implements their task in the assigned file.
-- Run `scripts/deployment/deploy_all.sql` and Validate `scripts/deployment/deploy_all.sql`
+- Run `scripts/deployment/deploy_all.sql` first to create the required objects.
+- Then run `scripts/demo/RecursiveTriggerDemo.sql` to execute the Task 5 recursive trigger demonstration.
+- Use `scripts/validation/Dhruv_RecursiveTrigger_Testing.sql` to confirm the expected results.
