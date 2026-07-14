@@ -10,8 +10,6 @@ Kelvin - ProductDeletionAudit and DatabaseSchemaAudit
 ========================================================
 */
 
--- HASSANA PART
--- Create Training Schema
 IF NOT EXISTS
 (
     SELECT *
@@ -22,12 +20,7 @@ BEGIN
     EXEC('CREATE SCHEMA Training');
 END;
 GO
-  
--- HASSANA PART
--- Create ProductPriceAudit Table
 
-IF OBJECT_ID('Training.ProductPriceAudit', 'U') IS NULL
-BEGIN
 CREATE TABLE Training.ProductPriceAudit
 (
     AuditID INT IDENTITY(1,1)
@@ -37,24 +30,26 @@ CREATE TABLE Training.ProductPriceAudit
 
     ProductName NVARCHAR(100) NOT NULL,
 
-    PreviousPrice MONEY NOT NULL,
+    OldPrice MONEY NOT NULL,
 
-    UpdatedPrice MONEY NOT NULL,
+    NewPrice MONEY NOT NULL,
 
-    ModifiedBy NVARCHAR(128) NOT NULL,
+    ChangedBy NVARCHAR(128)
+        CONSTRAINT DF_ProductPriceAudit_ChangedBy
+        DEFAULT SUSER_SNAME(),
 
-    ChangeDate DATETIME2 
-        CONSTRAINT DF_ProductPriceAudit_ChangeDate 
-        DEFAULT SYSDATETIME()
+    ChangeDate DATETIME2
+        CONSTRAINT DF_ProductPriceAudit_ChangeDate
+        DEFAULT SYSUTCDATETIME()
 );
-END;
 GO
 
--- KELVIN PART
--- Create ProductDeletionAudit Table
+ALTER TABLE Training.ProductPriceAudit
+ADD CONSTRAINT FK_ProductPriceAudit_Product
+FOREIGN KEY(ProductID)
+REFERENCES Production.Product(ProductID);
+GO
 
-IF OBJECT_ID('Training.ProductDeletionAudit', 'U') IS NULL
-BEGIN
 CREATE TABLE Training.ProductDeletionAudit
 (
     AuditID INT IDENTITY(1,1)
@@ -64,21 +59,24 @@ CREATE TABLE Training.ProductDeletionAudit
 
     ProductName NVARCHAR(100) NOT NULL,
 
-    AttemptingUser NVARCHAR(128) NOT NULL,
+    AttemptedBy NVARCHAR(128)
+        CONSTRAINT DF_ProductDeletionAudit_AttemptedBy
+        DEFAULT SUSER_SNAME(),
 
-    AttemptTime DATETIME2
-        CONSTRAINT DF_ProductDeletionAudit_AttemptTime
-        DEFAULT SYSDATETIME(),
+    AttemptDate DATETIME2
+        CONSTRAINT DF_ProductDeletionAudit_AttemptDate
+        DEFAULT SYSUTCDATETIME(),
 
-    Reason NVARCHAR(255) NOT NULL
+    Reason NVARCHAR(250) NOT NULL
 );
-END;
 GO
 
--- KELVIN PART
--- Create DatabaseSchemaAudit Table
-IF OBJECT_ID('Training.DatabaseSchemaAudit', 'U') IS NULL
-BEGIN
+ALTER TABLE Training.ProductDeletionAudit
+ADD CONSTRAINT FK_ProductDeletionAudit_Product
+FOREIGN KEY(ProductID)
+REFERENCES Production.Product(ProductID);
+GO
+
 CREATE TABLE Training.DatabaseSchemaAudit
 (
     AuditID INT IDENTITY(1,1)
@@ -88,36 +86,24 @@ CREATE TABLE Training.DatabaseSchemaAudit
 
     ObjectName NVARCHAR(128) NOT NULL,
 
-    LoginName NVARCHAR(128) NOT NULL,
+    LoginName NVARCHAR(128)
+        CONSTRAINT DF_DatabaseSchemaAudit_LoginName
+        DEFAULT SUSER_SNAME(),
 
-    EventTime DATETIME2
-        CONSTRAINT DF_DatabaseSchemaAudit_EventTime
-        DEFAULT SYSDATETIME()
+    EventDate DATETIME2
+        CONSTRAINT DF_DatabaseSchemaAudit_EventDate
+        DEFAULT SYSUTCDATETIME()
 );
-END;
 GO
 
--- INDEXES
-
--- Hassana Part
-CREATE INDEX IX_ProductPriceAudit_ProductID
+CREATE INDEX IX_ProductPriceAudit_Product
 ON Training.ProductPriceAudit(ProductID);
 GO
-  
--- Kelvin Part
-CREATE INDEX IX_ProductDeletionAudit_ProductID
+
+CREATE INDEX IX_ProductDeletionAudit_Product
 ON Training.ProductDeletionAudit(ProductID);
 GO
-  
--- Kelvin Part
+
 CREATE INDEX IX_DatabaseSchemaAudit_EventType
 ON Training.DatabaseSchemaAudit(EventType);
-GO
-
--- VALIDATION
-SELECT 
-    TABLE_SCHEMA,
-    TABLE_NAME
-FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'Training';
 GO
