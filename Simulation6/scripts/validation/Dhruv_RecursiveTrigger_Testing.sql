@@ -17,7 +17,9 @@ USE AdventureWorks2022;
 GO
 
 -- Step 2: Check whether the Training schema exists
-SELECT SCHEMA_NAME FROM sys.schemas WHERE name = 'Training';
+SELECT name
+FROM sys.schemas
+WHERE name = 'Training';
 GO
 
 -- Step 3: Run the deployment script

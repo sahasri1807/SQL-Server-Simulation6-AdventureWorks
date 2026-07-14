@@ -63,6 +63,11 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    IF TRIGGER_NESTLEVEL() > 1
+    BEGIN
+        RETURN;
+    END;
+
     INSERT INTO Training.RecursiveTriggerDemoLog (DemoID, TriggerInvocation)
     SELECT DemoID, COALESCE((SELECT MAX(TriggerInvocation) FROM Training.RecursiveTriggerDemoLog WHERE DemoID = i.DemoID), 0) + 1
     FROM inserted AS i;
@@ -78,31 +83,28 @@ END;
 GO
 
 DECLARE @InitialRecursiveState INT;
+DECLARE @DemoID INT;
+
 SELECT @InitialRecursiveState = CAST(DATABASEPROPERTYEX(DB_NAME(), N'IsRecursiveTriggersEnabled') AS INT);
 
 PRINT N'Recursive triggers before demo: ' + CASE WHEN @InitialRecursiveState = 1 THEN N'ON' ELSE N'OFF' END;
-GO
 
 IF @InitialRecursiveState = 0
 BEGIN
     ALTER DATABASE CURRENT SET RECURSIVE_TRIGGERS ON;
 END;
-GO
 
 DELETE FROM Training.RecursiveTriggerDemoLog;
 DELETE FROM Training.RecursiveTriggerDemo;
-GO
 
 INSERT INTO Training.RecursiveTriggerDemo (DemoValue)
 VALUES (100);
-GO
 
-DECLARE @DemoID INT = SCOPE_IDENTITY();
+SELECT @DemoID = SCOPE_IDENTITY();
 
 UPDATE Training.RecursiveTriggerDemo
 SET DemoValue = 101
 WHERE DemoID = @DemoID;
-GO
 
 SELECT
     DemoID,
@@ -111,7 +113,6 @@ SELECT
     LastModified
 FROM Training.RecursiveTriggerDemo
 WHERE DemoID = @DemoID;
-GO
 
 SELECT
     DemoID,
@@ -121,10 +122,8 @@ SELECT
 FROM Training.RecursiveTriggerDemoLog
 WHERE DemoID = @DemoID
 ORDER BY EventID;
-GO
 
 PRINT N'Observation: if recursive triggers are enabled, the trigger should appear twice in the log.';
-GO
 
 IF @InitialRecursiveState = 0
 BEGIN
